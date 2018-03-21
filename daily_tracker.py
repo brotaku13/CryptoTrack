@@ -39,6 +39,7 @@ def prettify_date(date: str):
     
 
 def compose_line(extreme: str, period: str, snapshot: dict, crypto: str):
+    df = snapshot['{}_data'.format(period.lower())]['data'].time_period_start[0]
     line = 'The Price of {crypto} is the {extreme}est it\'s been in the last {period}!\nThe last time it was this {extreme} was {date}.\nCurrent price: ${current_price}\n{period} {extreme} ${period_price}'.format(
         crypto=crypto,
         extreme=extreme,
@@ -47,7 +48,16 @@ def compose_line(extreme: str, period: str, snapshot: dict, crypto: str):
         current_price=snapshot['current_data']['price'],
         period_price=snapshot['{}_data'.format(period.lower())]['price_{}'.format(extreme)]
     )
-    return line
+    buy_sell = ''
+    if extreme.lower() == 'high':
+        buy_sell = 'sell'
+    else:
+        buy_sell = 'buy'
+
+    advice = f'\n\nAs the price is the {extreme}est it\'s been in the last {period}, now it a great time to {buy_sell} some {crpyto}.'
+    
+    print(line+advice)
+    return line + advice
 
 def create_message(snapshot: dict, crypto: str):
     current_price = snapshot['current_data']['price']
@@ -67,7 +77,7 @@ def create_message(snapshot: dict, crypto: str):
     elif snapshot['week_data']['price_high'] < current_price:
         return compose_line('high', 'week', snapshot, crypto)
     
-    elif snapshot['week_data']['price_low'] < current_price:
+    elif snapshot['week_data']['price_low'] > current_price:
         return compose_line('low', 'week', snapshot, crypto)
 
     else:
@@ -95,6 +105,8 @@ def main():
     message = create_message(snapshot, 'BTC')
     if message != '':
         send_report(message)
+    else:
+        print('Nothing remarkable is happening now. ')
     
 if __name__ == '__main__':
     main()

@@ -4,7 +4,6 @@ from pathlib import Path
 from datetime import datetime
 from fbchat import Client
 from fbchat.models import * 
-import secret
 import math
 
 CWD = Path.cwd()

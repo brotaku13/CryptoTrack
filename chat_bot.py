@@ -1,6 +1,5 @@
 from fbchat import log, Client
 from fbchat.models import *
-import secret
 import crypto_analysis as ca
 # Subclass fbchat.Client and override required methods
 class EchoBot(Client):

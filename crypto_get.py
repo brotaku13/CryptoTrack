@@ -15,6 +15,9 @@ cwd = Path.cwd()
 datafolder = cwd / 'Data'
 
 def get_data(symbol_id='BTC', period_id='1DAY', request_limit=1000, tdelta=30):
+    """
+    retrieves the data from the API for the given crypto, period_id and time delta
+    """
     now = datetime.utcnow()
     month = timedelta(days=tdelta)
     past_month = (now - month).isoformat()
@@ -27,6 +30,7 @@ def get_data(symbol_id='BTC', period_id='1DAY', request_limit=1000, tdelta=30):
         response = requests.get(HISTORY_URL, params=parameters, headers=header)
     
     data = response.json()
+    
     # this is a commnet
     csv_headers = ['time_period_start', 'time_period_end', 'price_high', 'price_low', 'price_close', 'price_open', 'trades_count', 
                     'volume_traded', 'time_open', 'time_close']

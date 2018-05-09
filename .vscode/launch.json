@@ -13,6 +13,7 @@
             "program": "${file}",
             "cwd": "${workspaceFolder}",
             "env": {},
+            "externalConsole": true,
             "envFile": "${workspaceFolder}/.env",
             "debugOptions": [
                 "RedirectOutput"

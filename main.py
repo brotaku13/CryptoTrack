@@ -4,9 +4,10 @@ import crypto_analysis as ca
 import getpass
 
 def main():
-    email = input('Email login: ')
-    password = getpass.getpass('Password: ')
+    email = input('Facebook login: ')
+    password = getpass.getpass('Facebook Password: ')
     client = EchoBot(email, password)
+    client.get_email_credentials()
     client.listen()
 
 if __name__ == '__main__':

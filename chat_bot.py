@@ -8,6 +8,8 @@ import mimetypes
 from email.message import EmailMessage
 import pw
 
+EMAIL_USERNAME = ''
+EMAIL_PASSWORD = ''
 # Subclass fbchat.Client and override required methods
 class EchoBot(Client):
     """
@@ -26,14 +28,19 @@ class EchoBot(Client):
             s.ehlo()
             s.starttls()
             s.ehlo()
-            s.login('Brian.caulfield13@gmail.com', pw.PASS)
+            s.login(EMAIL_USERNAME, EMAIL_PASSWORD)
             s.send_message(mail)
     
     def compose_email(self, to_address: str, body: str):
         msg = EmailMessage()
         msg.set_content(body)
-        self.create_header(msg, 'CryptoTrack', 'Brian.caulfield13@gmail.com', to_address)
+        self.create_header(msg, 'CryptoTrack', EMAIL_USERNAME, to_address)
         self.send_email(msg)
+
+    def get_email_credentials(self):
+        EMAIL_USERNAME = input('Email Login: ')
+        EMAIL_PASSWORD = getpass.getpass('Email Password: ')
+        
 
     def onMessage(self, author_id, message_object, thread_id, thread_type, **kwargs):
         """
@@ -46,6 +53,7 @@ class EchoBot(Client):
         """
         self.markAsDelivered(author_id, thread_id)
         self.markAsRead(author_id)
+        print('hello')
 
         log.info("{} from {} in {}".format(message_object, thread_id, thread_type.name))
         # If you're not the author, echo
@@ -58,14 +66,14 @@ class EchoBot(Client):
             email = text[1]
         
         if program_start == 'cryptotrack':
-            ca.get_data('BTC', '1DAY', 1000)
+            #ca.get_data('BTC', '1DAY', 1000)
             print(message_object.text)
             snapshot = ca.create_snapshot()
 
             ca.print_info(snapshot)
 
             message = ca.create_message(snapshot, 'BTC')
-
+            print(message)
             if message != '':
                 message = 'Greetings from CryptoTrack!\n' + message
                 if email == '':
